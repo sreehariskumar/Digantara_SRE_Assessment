@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: always
+    volumes:
+      - ./data:/data
+      - ./custom:/app/gitea/custom
+      - ./log:/app/gitea/log
+    ports:
+      - "3000:3000"
+      - "2222:22"
+    networks:
+      - digantara
+
+networks:
+  digantara:
+    external: true
+

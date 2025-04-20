@@ -1,0 +1,33 @@
+server:
+  host: 0.0.0.0
+  port: 9091
+
+log:
+  level: debug
+
+jwt_secret: supersecret_jwt_secret
+
+authentication_backend:
+  file:
+    path: ./config/users_database.yml
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: "*"
+      policy: one_factor
+
+session:
+  name: authelia_session
+  secret: session_secret_key
+  expiration: 3600
+  domain: 1by.online
+
+storage:
+  local:
+    path: /config/db.sqlite3
+    encryption_key: "d486a0032327e8e12f44bcf6bc85f0cdee15e4d6f674dbe42c6c3c34598d1179"
+
+notifier:
+  filesystem:
+    filename: ./config/notification.txt

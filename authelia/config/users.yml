@@ -1,0 +1,7 @@
+users:
+  sreehari:
+    password: "$argon2id$v=19$m=65536,t=3,p=4$Gq/oZoqcKPElXgex9VNFLw$gCY8T8IZLJDTnJTWpP/wbXCgaIibEcz5/rsHfPgR0LU" 
+    displayname: "sreehari"
+    email: sree@gmail.com
+    groups:
+      - admins

@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: always
+    volumes:
+      - ./gitea/data:/data
+      - ./gitea/custom:/app/gitea/custom
+      - ./gitea/log:/app/gitea/log
+    ports:
+      - "3000:3000"
+      - "2222:22"
+    networks:
+      - digantara
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - digantara
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    ports:
+      - "3100:3000"
+    networks:
+      - digantara
+
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    restart: unless-stopped
+    volumes:
+      - ./authelia/config:/config
+    environment:
+      TZ: Asia/Kolkata
+    ports:
+      - "9091:9091"
+    networks:
+      - digantara
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - gitea
+      - grafana
+      - prometheus
+      - authelia
+    networks:
+      - digantara
+
+networks:
+  digantara:
+    external: true

@@ -1,0 +1,40 @@
+server:
+  address: tcp://0.0.0.0:9091
+
+log:
+  level: info
+
+theme: auto
+
+session:
+  name: authelia_session
+  expiration: 1h
+  inactivity: 5m
+  cookies:
+    - name: authelia_session
+      domain: 1by2.online
+      authelia_url: https://auth.1by2.online
+      default_redirection_url: https://www.1by2.online
+
+authentication_backend:
+  file:
+    path: /config/users.yml
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: "1by2.online"
+      policy: one_factor
+
+storage:
+  local:
+    path: /config/db.sqlite3
+  encryption_key: "d486a0032327e8e12f44bcf6bc85f0cdee15e4d6f674dbe42c6c3c34598d1179"
+
+identity_validation:
+  reset_password:
+    jwt_secret: "14f9fb48418031e267280d775089fdb661748c3a9a0ba05770ad29779329c602fad5e5d434ba51bbb6416755b927bf22aa3016def41190d9f6df2ea3965e1b52"
+
+notifier:
+  filesystem:
+    filename: /config/notification.txt
